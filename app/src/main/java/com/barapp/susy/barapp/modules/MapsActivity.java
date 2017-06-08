@@ -90,12 +90,6 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,Map
 
         //ACTIONS BUTTONS
 
-        buttonLoading.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadigRelativeLayout.setVisibility(View.GONE);
-            }
-        });
 
         buttonAddPlace.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,6 +183,13 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,Map
                 //.load("https://media2.giphy.com/media/DGWAx8d3IkICs/giphy.gif")
                 .load(R.drawable.beer3)
                 .into(imageView);
+
+        buttonLoading.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadigRelativeLayout.setVisibility(View.GONE);
+            }
+        });
 
 
 

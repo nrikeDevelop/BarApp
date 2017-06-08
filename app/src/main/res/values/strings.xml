@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">BarApp</string>
     <string name="title_activity_maps">Map</string>
+
+    <string name="turn_on_gps">Enciende el gps</string>
+    <string name="gps_is_loading">Cargando gps</string>
+
+    <!--Loading -->
+    <string name="loading_button">Continuar</string>
+    <string name="loading_title">Una poesia...</string>
+
+    <!--Dialog add marker -->
+    <string name="dialog_title">Local</string>
+    <string name="dialog_name_local">Nombre del local</string>
+    <string name="dialog_add_button_add_marker">Añadir</string>
+    <string name="dialog_empty_data">Introduce el nombre</string>
+
 </resources>

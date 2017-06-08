@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">@color/Lighting_yellow</color>
+    <color name="colorPrimaryDark">@color/DarkOrange</color>
+    <color name="colorAccent">@color/grey_backgraund_2</color>
+
+    <color name="buttonRipple">@color/grey_backgraund</color>
+    <color name="buttonRippleShadow">@color/grey_backgraund_2</color>
+
+    <color name="DarkOrange">#FB9506</color>
+    <color name="Lighting_yellow">  #F7A32A </color>
+    <color name="Golden_Tainoi">#FDC462</color>
+    
+    <color name="Aqua_Haze"> #D5D6D4 </color>
+    <color name="Zorba"> #A49C97 </color>
+    <color name="grey_backgraund">#252825</color>
+    <color name="grey_backgraund_2">#2e302e</color>
+    <color name="transparent">#00282828</color>
 </resources>

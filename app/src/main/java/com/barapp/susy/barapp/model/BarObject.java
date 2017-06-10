@@ -7,7 +7,7 @@ import com.google.android.gms.maps.model.LatLng;
  */
 
 public class BarObject {
-    String id = this.name;
+    String id;
     double latitude;
     double longitude;
     String direction;
@@ -26,6 +26,10 @@ public class BarObject {
         this.name = name;
         this.positiveValue = positiveValue;
         this.negativeValue = negativeValue;
+
+        setID();
+
+
     }
 
     public String getId() {
@@ -83,4 +87,9 @@ public class BarObject {
     public void setNegativeValue(int negativeValue) {
         this.negativeValue = negativeValue;
     }
+
+    public void setID(){
+        this.id = this.name;
+    }
+
 }

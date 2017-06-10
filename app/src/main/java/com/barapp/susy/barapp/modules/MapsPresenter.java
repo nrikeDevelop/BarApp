@@ -27,7 +27,11 @@ public class MapsPresenter {
     }
 
     public void loadPlaces(){
-        Firebase.getPlace(mapsView,Firebase.UBICATION);
+        Firebase.getPlaces(mapsView,Firebase.UBICATION);
+    }
+
+    public void getPlace(String nameID){
+        Firebase.getPlace(Firebase.UBICATION,nameID);
     }
 
 

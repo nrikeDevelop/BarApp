@@ -26,6 +26,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
@@ -119,6 +120,15 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,Map
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                String nameID = marker.getTitle();
+                mapsPresenter.getPlace(nameID);
+                return true;
+            }
+        });
+
     }
 
     @Override
@@ -179,7 +189,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,Map
 
                     LatLng latlong = new LatLng(GpsLocation.getLatitude(),GpsLocation.getLongitude());
                     BarObject barObject = new BarObject(latlong.latitude,latlong.longitude,GpsLocation.getDirection(),
-                            editTextName.getText().toString(),0,0);
+                            editTextName.getText().toString().toLowerCase(),0,0);
                     //mapsPresenter.addMarker(mMap,barObject);
 
                     mapsPresenter.addPlace(barObject);

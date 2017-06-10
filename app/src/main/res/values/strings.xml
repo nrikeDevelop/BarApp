@@ -5,6 +5,9 @@
     <string name="turn_on_gps">Enciende el gps</string>
     <string name="gps_is_loading">Cargando gps</string>
 
+    <string name="main_local_exist">El local introducido ya existe</string>
+    <string name="main_local_added">Local introducido </string>
+
     <!--Loading -->
     <string name="loading_button">Continuar</string>
     <string name="loading_title">Una poesia...</string>

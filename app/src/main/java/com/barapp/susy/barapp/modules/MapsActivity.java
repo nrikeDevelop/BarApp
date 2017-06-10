@@ -4,10 +4,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
-import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -23,10 +21,12 @@ import com.barapp.susy.barapp.common.BaseActivity;
 import com.barapp.susy.barapp.common.GpsLocation;
 import com.barapp.susy.barapp.model.BarObject;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 
 public class MapsActivity extends BaseActivity implements OnMapReadyCallback,MapsView {
@@ -74,9 +74,10 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,Map
 
         context = this;
         mapsView = this;
-        mapsPresenter = new MapsPresenter(mapsView, context);
+        mapsPresenter = new MapsPresenter(mapsView, context,mMap);
         setUI();
 
+        // Load loading
         loading();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -88,12 +89,16 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,Map
             requestPermissions();
         }
 
+        mapsPresenter.loadPlaces();
+
         //ACTIONS BUTTONS
 
 
         buttonAddPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 if(GpsLocation.isRecivingData()){
                     if (GpsLocation.getLongitude() == 0.0 || GpsLocation.getLatitude() == 0.0) {
                         Toast.makeText(context, context.getString(R.string.gps_is_loading), Toast.LENGTH_SHORT).show();
@@ -121,6 +126,12 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,Map
         Toast.makeText(this, string, Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void localAdded(BarObject barObject) {
+        LatLng latLng = new LatLng(barObject.getLatitude(), barObject.getLongitude());
+        mMap.addMarker(new MarkerOptions().position(latLng).title(barObject.getName()));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+    }
 
 
     @Override
@@ -167,9 +178,11 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,Map
                 }else{
 
                     LatLng latlong = new LatLng(GpsLocation.getLatitude(),GpsLocation.getLongitude());
-                    BarObject barObject = new BarObject(latlong,GpsLocation.getDirection(),
+                    BarObject barObject = new BarObject(latlong.latitude,latlong.longitude,GpsLocation.getDirection(),
                             editTextName.getText().toString(),0,0);
-                    mapsPresenter.addMarker(mMap,barObject);
+                    //mapsPresenter.addMarker(mMap,barObject);
+
+                    mapsPresenter.addPlace(barObject);
 
                     viewDialog.dismiss();
                 }

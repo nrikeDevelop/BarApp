@@ -7,26 +7,49 @@ import com.google.android.gms.maps.model.LatLng;
  */
 
 public class BarObject {
-    LatLng latLng;
+    String id = this.name;
+    double latitude;
+    double longitude;
     String direction;
     String name;
     int positiveValue;
     int negativeValue;
 
-    public BarObject(LatLng latLng, String direction, String name, int positiveValue, int negativeValue) {
-        this.latLng = latLng;
+    public BarObject() {
+
+    }
+
+    public BarObject( double latitude, double longitude, String direction, String name, int positiveValue, int negativeValue) {
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.direction = direction;
         this.name = name;
         this.positiveValue = positiveValue;
         this.negativeValue = negativeValue;
     }
 
-    public LatLng getLatLng() {
-        return latLng;
+    public String getId() {
+        return id;
     }
 
-    public void setLatLng(LatLng latLng) {
-        this.latLng = latLng;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     public String getDirection() {

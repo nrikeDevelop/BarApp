@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "694481603878",
+    "firebase_url": "https://barapp-170107.firebaseio.com",
+    "project_id": "barapp-170107",
+    "storage_bucket": "barapp-170107.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:694481603878:android:bc4f24e568050f10",
+        "android_client_info": {
+          "package_name": "com.barapp.susy.barapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "694481603878-hqc3jcc0nrju3gd1ubmou9gt86v4p53n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8jeGvaMp_MbXOoAPAm6qGLJpHqYNSRSk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

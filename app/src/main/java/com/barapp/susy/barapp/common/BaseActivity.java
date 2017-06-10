@@ -10,6 +10,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 /**
  * Created by susy on 8/06/17.
  */
@@ -18,6 +21,7 @@ public class BaseActivity extends AppCompatActivity {
 
     GpsLocation gpsLocation;
     LocationManager locationManager;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

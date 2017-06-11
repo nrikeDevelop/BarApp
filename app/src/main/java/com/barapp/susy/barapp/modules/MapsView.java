@@ -12,4 +12,6 @@ public interface MapsView {
 
     void localAdded(BarObject barObject);
 
+    void localSelected(BarObject barObject);
+
 }

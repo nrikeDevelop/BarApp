@@ -32,16 +32,18 @@ public class Firebase extends BaseActivity {
         databaseRef = database.getReference(ref);
     }
 
-    public static void getPlace(String ref,String queryStringID){
+    public static void getPlace(final MapsView mapsView, String ref, final String queryStringID){
         referenceDatabase(ref);
         Query findQuery = databaseRef.equalTo(queryStringID).orderByKey();
         findQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                System.out.println(">>>>>>"+dataSnapshot.getValue(BarObject.class).getDirection());
-                BarObject barObject = dataSnapshot.getValue(BarObject.class);
-                System.out.println(barObject.getName());
-                //System.out.println(barObject.getName()+"   ha sido pulsado");
+
+                DataSnapshot snapshot = dataSnapshot.child(queryStringID);
+                BarObject barObject = snapshot.getValue(BarObject.class);
+
+                mapsView.localSelected(barObject);
+
             }
 
             @Override
@@ -57,6 +59,9 @@ public class Firebase extends BaseActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                    System.out.println("cargado de mapa "+snapshot.getValue());
+
                     BarObject barObject = snapshot.getValue(BarObject.class);
                     mapsView.localAdded(barObject);
 

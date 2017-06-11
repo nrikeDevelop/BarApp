@@ -31,7 +31,7 @@ public class MapsPresenter {
     }
 
     public void getPlace(String nameID){
-        Firebase.getPlace(Firebase.UBICATION,nameID);
+        Firebase.getPlace(mapsView,Firebase.UBICATION,nameID);
     }
 
 

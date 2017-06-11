@@ -12,6 +12,7 @@ public class BarObject {
     double longitude;
     String direction;
     String name;
+    String description;
     int positiveValue;
     int negativeValue;
 
@@ -19,11 +20,12 @@ public class BarObject {
 
     }
 
-    public BarObject( double latitude, double longitude, String direction, String name, int positiveValue, int negativeValue) {
+    public BarObject( double latitude, double longitude, String direction, String name,String description, int positiveValue, int negativeValue) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.direction = direction;
         this.name = name;
+        this.description = description;
         this.positiveValue = positiveValue;
         this.negativeValue = negativeValue;
 
@@ -70,6 +72,14 @@ public class BarObject {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getPositiveValue() {

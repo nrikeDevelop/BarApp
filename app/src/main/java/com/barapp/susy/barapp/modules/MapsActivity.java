@@ -8,6 +8,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,6 +30,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.like.LikeButton;
+import com.like.OnLikeListener;
 
 
 public class MapsActivity extends BaseActivity implements OnMapReadyCallback,MapsView {
@@ -93,8 +97,6 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,Map
         mapsPresenter.loadPlaces();
 
         //ACTIONS BUTTONS
-
-
         buttonAddPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,12 +111,9 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,Map
                 }else{
                     Toast.makeText(context,context.getString(R.string.turn_on_gps), Toast.LENGTH_SHORT).show();
                 }
-
-
             }
         });
     }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -141,6 +140,15 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,Map
         LatLng latLng = new LatLng(barObject.getLatitude(), barObject.getLongitude());
         mMap.addMarker(new MarkerOptions().position(latLng).title(barObject.getName()));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+    }
+
+    @Override
+    public void localSelected(BarObject barObject) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+        dialog.setTitle(barObject.getName());
+
+        dialog.create();
+        dialog.show();
     }
 
 
@@ -171,6 +179,25 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,Map
         Button buttonAddMarker = (Button) view.findViewById(R.id.dialog_button_add);
         TextView textViewUbication = (TextView) view.findViewById(R.id.dialog_ubication_bar);
         final EditText editTextName = (EditText) view.findViewById(R.id.dialog_edit_text);
+        final EditText editTextDecription = (EditText) view.findViewById(R.id.dialog_edit_description);
+        final TextView editTextCount = (TextView) view.findViewById(R.id.dialog_edit_count);
+
+        /*
+        LikeButton likeButton = (LikeButton) view.findViewById(R.id.lik) ;
+        likeButton.setOnLikeListener(new OnLikeListener() {
+            @Override
+            public void liked(LikeButton likeButton) {
+                Toast.makeText(MapsActivity.this, "GUSTA", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void unLiked(LikeButton likeButton) {
+                Toast.makeText(MapsActivity.this, "NO GUSTA", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        */
+
 
         textViewUbication.setText(GpsLocation.getDirection());
 
@@ -189,13 +216,29 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,Map
 
                     LatLng latlong = new LatLng(GpsLocation.getLatitude(),GpsLocation.getLongitude());
                     BarObject barObject = new BarObject(latlong.latitude,latlong.longitude,GpsLocation.getDirection(),
-                            editTextName.getText().toString().toLowerCase(),0,0);
+                            editTextName.getText().toString().toLowerCase(),editTextDecription.getText().toString(),0,0);
                     //mapsPresenter.addMarker(mMap,barObject);
 
                     mapsPresenter.addPlace(barObject);
-
                     viewDialog.dismiss();
                 }
+            }
+        });
+
+        editTextDecription.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                editTextCount.setText(String.valueOf(s.length()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 

@@ -101,7 +101,6 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,Map
             @Override
             public void onClick(View v) {
 
-
                 if(GpsLocation.isRecivingData()){
                     if (GpsLocation.getLongitude() == 0.0 || GpsLocation.getLatitude() == 0.0) {
                         Toast.makeText(context, context.getString(R.string.gps_is_loading), Toast.LENGTH_SHORT).show();
@@ -144,11 +143,16 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,Map
 
     @Override
     public void localSelected(BarObject barObject) {
+
+        View view = getLayoutInflater().inflate(getResources().getLayout(R.layout.like_dislike_dialog),null);
+
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
         dialog.setTitle(barObject.getName());
 
-        dialog.create();
-        dialog.show();
+        dialog.setView(view);
+
+        AlertDialog actionDialog = dialog.create();
+        actionDialog.show();
     }
 
 
@@ -197,6 +201,8 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,Map
             }
         });
         */
+
+        //PREFERENCES > GUARDAMOS EL NOMBRE Y UN LIKE/DISLIKE ( "cellerdejoan-like" )
 
 
         textViewUbication.setText(GpsLocation.getDirection());

@@ -2,8 +2,11 @@ package com.barapp.susy.barapp.modules;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,6 +30,7 @@ import com.barapp.susy.barapp.model.BarObject;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -34,6 +38,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
+
+import org.w3c.dom.Text;
+
+import java.util.Locale;
 
 
 public class MapsActivity extends BaseActivity implements OnMapReadyCallback,MapsView {
@@ -51,13 +59,39 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,Map
     TextView loadingText;
     Button buttonLoading;
     ImageView imageView;
+
+    View dialogSelectedView ;
+    TextView dialogSelectedNameTitlte;
+    TextView dialogSelectedDescription ;
+    TextView dialogSelectedUbication ;
+    TextView dialogSelectedLikes;
+    LikeButton dialogSelectedlikeButton;
+    Button dialogSelectedButtonUbication;
+
+    AlertDialog.Builder dialogSelected ;
+    AlertDialog dialogSelectedActionDialog;
+
     public void setUI(){
+        dialogSelected = new AlertDialog.Builder(context);
+
         loadigRelativeLayout = (RelativeLayout) findViewById(R.id.loading_layout);
         buttonAddPlace = (Button) findViewById(R.id.main_add_place_button);
         buttonLoading = (Button) findViewById(R.id.main_button_loading);
         loadingText = (TextView) findViewById(R.id.loading_poema_tittle);
         loadingTitle = ( TextView) findViewById(R.id.loading_poema_text);
         imageView = (ImageView) findViewById(R.id.image_view_loading);
+
+        //DIALOG_SELECTED
+        dialogSelectedView = getLayoutInflater().inflate(getResources().getLayout(R.layout.like_dislike_dialog),null);
+        dialogSelectedNameTitlte = (TextView) dialogSelectedView.findViewById(R.id.dialog_like_dislike_name);
+        dialogSelectedDescription = (TextView) dialogSelectedView.findViewById(R.id.dialog_like_dislike_description);
+        dialogSelectedUbication = (TextView) dialogSelectedView.findViewById(R.id.dialog_like_dislike_ubication_bar);
+        dialogSelectedLikes = (TextView) dialogSelectedView.findViewById(R.id.dialog_like_dislike_persons);
+        dialogSelectedlikeButton = (LikeButton) dialogSelectedView.findViewById(R.id.dialog_like_dislike_heart) ;
+        dialogSelectedButtonUbication = (Button) dialogSelectedView.findViewById(R.id.dialog_like_dislike_button);
+
+        dialogSelected.setView(dialogSelectedView);
+        dialogSelectedActionDialog = dialogSelected.create();
 
         setUpFonts();
     }
@@ -125,7 +159,6 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,Map
             public boolean onMarkerClick(Marker marker) {
                 String nameID = marker.getTitle();
                 mapsPresenter.getPlace(nameID);
-
                 return true;
             }
         });
@@ -148,18 +181,31 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,Map
     public void localSelected(final BarObject barObject) {
 
         String nameLocal = barObject.getName();
+        dialogSelectedNameTitlte.setText(nameLocal);
 
-        View view = getLayoutInflater().inflate(getResources().getLayout(R.layout.like_dislike_dialog),null);
-        TextView description = (TextView) view.findViewById(R.id.dialog_like_dislike_description);
-        TextView ubication = (TextView) view.findViewById(R.id.dialog_like_dislike_ubication_bar);
-
-        LikeButton likeButton = (LikeButton) view.findViewById(R.id.dialog_like_dislike_heart) ;
-        likeButton.setOnLikeListener(new OnLikeListener() {
+        mapsPresenter.getLikePlaces(barObject);
+        dialogSelectedlikeButton = (LikeButton) dialogSelectedView.findViewById(R.id.dialog_like_dislike_heart) ;
+        dialogSelectedlikeButton.setOnLikeListener(new OnLikeListener() {
             @Override
             public void liked(LikeButton likeButton) {
                 Toast.makeText(MapsActivity.this, context.getString(R.string.selected_i_like), Toast.LENGTH_SHORT).show();
                 Preferences.likeBar(context,true);
                 mapsPresenter.setLikePlace(barObject,true);
+
+                int likes = Integer.parseInt(dialogSelectedLikes.getText().toString());
+                likes = likes + 1;
+                if(likes >= 0)dialogSelectedLikes.setText(String.valueOf(likes));
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                       dialogSelectedlikeButton.setEnabled(true);
+                    }
+                },500);
+                dialogSelectedlikeButton.setEnabled(false);
+
+
             }
 
             @Override
@@ -168,28 +214,49 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,Map
                 Preferences.likeBar(context,false);
                 mapsPresenter.setLikePlace(barObject,false);
 
+                int likes = Integer.parseInt(dialogSelectedLikes.getText().toString());
+                likes = likes - 1;
+                if(likes >= 0)dialogSelectedLikes.setText(String.valueOf(likes));
+
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialogSelectedlikeButton.setEnabled(true);
+                    }
+                },500);
+                dialogSelectedlikeButton.setEnabled(false);
 
             }
         });
 
-        description.setText(barObject.getDescription());
-        ubication.setText(barObject.getDirection());
+        dialogSelectedButtonUbication.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String uri = String.format(Locale.getDefault(),
+                        "http://maps.google.com/maps?daddr=%f,%f (%s)",
+                        barObject.getLatitude(),
+                        barObject.getLongitude(),
+                        barObject.getDirection());
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                intent.setPackage("com.google.android.apps.maps");
+                startActivity(intent);
+            }
+        });
+
+        dialogSelectedDescription.setText(barObject.getDescription());
+        dialogSelectedUbication.setText(barObject.getDirection());
         if(Preferences.getLikeBar(context)){
-            likeButton.setLiked(true);
+            dialogSelectedlikeButton.setLiked(true);
         }
 
-        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-        dialog.setTitle(barObject.getName());
-
-        dialog.setView(view);
-
-        AlertDialog actionDialog = dialog.create();
-        actionDialog.show();
+        dialogSelectedActionDialog.show();
     }
 
     @Override
-    public void localLike(int localLike) {
-
+    public void localLike(int positiveValue) {
+        if(positiveValue >= 0)dialogSelectedLikes.setText(String.valueOf(positiveValue));
     }
 
 
@@ -268,6 +335,11 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,Map
 
     }
 
+    public void currentLocation(){
+        LatLng coordinate = new LatLng(GpsLocation.getLatitude(), GpsLocation.getLongitude());
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinate, 17.7f));
+    }
+
     public void loading(){
         Glide.with(context)
                 //.load("https://media2.giphy.com/media/DGWAx8d3IkICs/giphy.gif")
@@ -278,6 +350,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,Map
             @Override
             public void onClick(View v) {
                 loadigRelativeLayout.setVisibility(View.GONE);
+                currentLocation();
             }
         });
 

@@ -122,10 +122,12 @@ public class Firebase extends BaseActivity {
                 BarObject barObject = snapshot.getValue(BarObject.class);
                 int positiveValue = barObject.getPositiveValue();
 
-                if(like){
-                    positiveValue = positiveValue + 1;
-                }else{
-                    positiveValue = positiveValue - 1;
+                if(positiveValue >= 0){
+                    if(like){
+                        positiveValue = positiveValue + 1;
+                    }else{
+                        positiveValue = positiveValue - 1;
+                    }
                 }
 
                 databaseRef.child(ID).child(POSIVITE_VALUE).setValue(positiveValue);
@@ -140,7 +142,7 @@ public class Firebase extends BaseActivity {
         });
     }
 
-    public static void getLikePlace(final Context context, MapsView mapsView, final BarObject barObject, String ref){
+    public static void getLikePlace(final Context context, final MapsView mapsView, final BarObject barObject, String ref){
         referenceDatabase(ref);
 
         final String ID = barObject.getId();
@@ -155,6 +157,7 @@ public class Firebase extends BaseActivity {
                 BarObject barObject = snapshot.getValue(BarObject.class);
                 int positiveValue = barObject.getPositiveValue();
 
+                mapsView.localLike(positiveValue);
 
 
             }

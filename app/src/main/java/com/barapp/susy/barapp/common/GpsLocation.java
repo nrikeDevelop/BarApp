@@ -8,10 +8,13 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.health.TimerStat;
 import android.support.v4.app.ActivityCompat;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.LocationSource;
 
 import java.io.IOException;
 import java.util.List;
@@ -89,4 +92,5 @@ public class GpsLocation implements LocationListener {
     public static String getDirection(){
         return direction;
     }
+
 }

@@ -14,4 +14,6 @@ public interface MapsView {
 
     void localSelected(BarObject barObject);
 
+    void localLike( int localLike);
+
 }

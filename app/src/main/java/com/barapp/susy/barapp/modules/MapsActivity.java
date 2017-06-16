@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.barapp.susy.barapp.R;
 import com.barapp.susy.barapp.common.BaseActivity;
 import com.barapp.susy.barapp.common.GpsLocation;
+import com.barapp.susy.barapp.common.Preferences;
 import com.barapp.susy.barapp.model.BarObject;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -123,6 +125,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,Map
             public boolean onMarkerClick(Marker marker) {
                 String nameID = marker.getTitle();
                 mapsPresenter.getPlace(nameID);
+
                 return true;
             }
         });
@@ -142,9 +145,38 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,Map
     }
 
     @Override
-    public void localSelected(BarObject barObject) {
+    public void localSelected(final BarObject barObject) {
+
+        String nameLocal = barObject.getName();
 
         View view = getLayoutInflater().inflate(getResources().getLayout(R.layout.like_dislike_dialog),null);
+        TextView description = (TextView) view.findViewById(R.id.dialog_like_dislike_description);
+        TextView ubication = (TextView) view.findViewById(R.id.dialog_like_dislike_ubication_bar);
+
+        LikeButton likeButton = (LikeButton) view.findViewById(R.id.dialog_like_dislike_heart) ;
+        likeButton.setOnLikeListener(new OnLikeListener() {
+            @Override
+            public void liked(LikeButton likeButton) {
+                Toast.makeText(MapsActivity.this, context.getString(R.string.selected_i_like), Toast.LENGTH_SHORT).show();
+                Preferences.likeBar(context,true);
+                mapsPresenter.setLikePlace(barObject,true);
+            }
+
+            @Override
+            public void unLiked(LikeButton likeButton) {
+                Toast.makeText(MapsActivity.this, context.getString(R.string.selected_i_no_like), Toast.LENGTH_SHORT).show();
+                Preferences.likeBar(context,false);
+                mapsPresenter.setLikePlace(barObject,false);
+
+
+            }
+        });
+
+        description.setText(barObject.getDescription());
+        ubication.setText(barObject.getDirection());
+        if(Preferences.getLikeBar(context)){
+            likeButton.setLiked(true);
+        }
 
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
         dialog.setTitle(barObject.getName());
@@ -153,6 +185,11 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,Map
 
         AlertDialog actionDialog = dialog.create();
         actionDialog.show();
+    }
+
+    @Override
+    public void localLike(int localLike) {
+
     }
 
 
@@ -185,25 +222,6 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,Map
         final EditText editTextName = (EditText) view.findViewById(R.id.dialog_edit_text);
         final EditText editTextDecription = (EditText) view.findViewById(R.id.dialog_edit_description);
         final TextView editTextCount = (TextView) view.findViewById(R.id.dialog_edit_count);
-
-        /*
-        LikeButton likeButton = (LikeButton) view.findViewById(R.id.lik) ;
-        likeButton.setOnLikeListener(new OnLikeListener() {
-            @Override
-            public void liked(LikeButton likeButton) {
-                Toast.makeText(MapsActivity.this, "GUSTA", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void unLiked(LikeButton likeButton) {
-                Toast.makeText(MapsActivity.this, "NO GUSTA", Toast.LENGTH_SHORT).show();
-
-            }
-        });
-        */
-
-        //PREFERENCES > GUARDAMOS EL NOMBRE Y UN LIKE/DISLIKE ( "cellerdejoan-like" )
-
 
         textViewUbication.setText(GpsLocation.getDirection());
 

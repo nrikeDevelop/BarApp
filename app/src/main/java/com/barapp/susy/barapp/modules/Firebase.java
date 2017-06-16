@@ -2,6 +2,7 @@ package com.barapp.susy.barapp.modules;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.barapp.susy.barapp.R;
 import com.barapp.susy.barapp.common.BaseActivity;
@@ -104,10 +105,65 @@ public class Firebase extends BaseActivity {
                 System.out.println("Error");
             }
         });
-
     }
 
+    public static void setLikePlace(final Context context, final BarObject barObject, String ref, final boolean like){
+        referenceDatabase(ref);
+
+        final String ID = barObject.getId();
+        final String POSIVITE_VALUE = "positiveValue";
+
+        Query findQuery = databaseRef.child(barObject.getId()).orderByKey();
+        findQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                DataSnapshot snapshot = dataSnapshot;
+                BarObject barObject = snapshot.getValue(BarObject.class);
+                int positiveValue = barObject.getPositiveValue();
+
+                if(like){
+                    positiveValue = positiveValue + 1;
+                }else{
+                    positiveValue = positiveValue - 1;
+                }
+
+                databaseRef.child(ID).child(POSIVITE_VALUE).setValue(positiveValue);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //ERROR
+                System.out.println("Error");
+            }
+        });
+    }
+
+    public static void getLikePlace(final Context context, MapsView mapsView, final BarObject barObject, String ref){
+        referenceDatabase(ref);
+
+        final String ID = barObject.getId();
+        final String POSIVITE_VALUE = "positiveValue";
+
+        Query findQuery = databaseRef.child(barObject.getId()).orderByKey();
+        findQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                DataSnapshot snapshot = dataSnapshot;
+                BarObject barObject = snapshot.getValue(BarObject.class);
+                int positiveValue = barObject.getPositiveValue();
 
 
 
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //ERROR
+                System.out.println("Error");
+            }
+        });
+    }
 }

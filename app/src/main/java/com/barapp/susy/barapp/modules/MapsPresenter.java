@@ -34,6 +34,14 @@ public class MapsPresenter {
         Firebase.getPlace(mapsView,Firebase.UBICATION,nameID);
     }
 
+    public void setLikePlace (BarObject barObject, boolean like){
+        Firebase.setLikePlace(context,barObject,Firebase.UBICATION,like);
+    }
+
+    public void getLikePlaces(BarObject barObject){
+        Firebase.getLikePlace(context,mapsView,barObject,Firebase.UBICATION);
+    }
+
 
 
 }

@@ -12,6 +12,14 @@
     <string name="loading_button">Continuar</string>
     <string name="loading_title">Una poesia...</string>
 
+    <!--Dialog Selected marker -->
+    <string name="selected_liked">Les gusta a </string>
+    <string name="selected_liked_person"> personas </string>
+    <string name="selected_ubication">¿Como llegar?</string>
+    <string name="selected_i_like">Me gusta</string>
+    <string name="selected_i_no_like">Ya no me gusta</string>
+
+
     <!--Dialog add marker -->
     <string name="dialog_title">Local</string>
     <string name="dialog_name_local">Nombre del local</string>
